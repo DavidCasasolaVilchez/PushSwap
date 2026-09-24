@@ -81,6 +81,22 @@ El ejecutable debe llamarse `push_swap`. El primer argumento numérico represent
 
 Los selectores deben funcionar con cualquier tamaño de entrada e índice de desorden. La salida normal debe contener únicamente las operaciones generadas, una por línea. Sin argumentos, el programa no muestra nada y termina correctamente.
 
+## Gestión de los argumentos de entrada en `main`
+
+- Comprobar `argc` y terminar correctamente, sin mostrar nada, cuando no se reciben argumentos.
+- Recorrer `argv` y separar las opciones (`--simple`, `--medium`, `--complex`, `--adaptive` y `--bench`) de los valores numéricos.
+- Permitir que las opciones aparezcan en cualquier posición, siempre que no se repitan de forma incompatible.
+- Usar `--adaptive` como estrategia predeterminada cuando no se indique otra estrategia.
+- Rechazar estrategias duplicadas o combinaciones de opciones incompatibles y enviar exactamente `Error\n` a `stderr`.
+- Convertir cada argumento numérico a un `int` sin aceptar conversiones parciales, espacios no previstos, signos aislados ni caracteres adicionales.
+- Detectar desbordamientos antes de convertir a `int`, incluidos valores fuera de `INT_MIN` y `INT_MAX`.
+- Rechazar argumentos vacíos, valores que no sean enteros y números duplicados.
+- Decidir explícitamente cómo tratar argumentos separados por espacios dentro de una misma cadena si se desea admitir ese formato.
+- Guardar los valores parseados en la estructura inicial del stack `a` y dejar `b` vacío.
+- Conservar la opción `--bench` como configuración del programa, sin imprimirla en `stdout`.
+- Ante cualquier error de parsing o validación, liberar toda la memoria reservada y terminar con el mensaje exacto `Error\n` en `stderr`.
+- Comprobar después del parsing que existe al menos un número que ordenar cuando se han proporcionado opciones.
+
 ## Validación y errores
 
 Rechazar valores que no sean enteros, valores fuera del rango de `int`, números duplicados y opciones desconocidas. En caso de error, escribir exactamente `Error\n` en `stderr`.
