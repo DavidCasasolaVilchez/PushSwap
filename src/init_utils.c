@@ -1,20 +1,14 @@
 #include "../include/push_swap.h"
 
-t_stack	*ft_init_stack()
+/*t_list	*ft_init_stack()
 {
-	t_stack	*numbers;
+	t_list		*node;
 
-	numbers = malloc(sizeof(t_stack));
-	if (numbers == NULL)
-		return (NULL);
-	numbers->capacity = 42;
-	numbers->size = 0;
-	numbers->nums = malloc(sizeof(char) * numbers->capacity);
-	if (numbers->nums == NULL)
-		return (free(numbers), NULL);
-	numbers->nums[0] = '\0';
-	return (numbers);
-}
+	node = ft_malloc(sizeof(t_list));
+	node->content = NULL;
+	node->next = NULL;
+	return (node);
+}*/
 
 t_context	*ft_init_context()
 {
@@ -24,6 +18,6 @@ t_context	*ft_init_context()
 	cx->alg = NULL;
 	cx->bench = false;
 	cx->can_space = true;
-	cx->stack = ft_init_stack();
+	cx->stack = NULL;
 	return (cx);
 }

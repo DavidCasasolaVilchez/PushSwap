@@ -42,7 +42,8 @@ int		ft_str_is_num(char *s, int *index, t_context *cx)
 	if ((s[*index] == ' ' && cx->can_space && (ft_isdigit(s[*index + 1]) ||
 		s[*index + 1] || s[*index + 1] == '-')) || !(s[*index]))
 	{
-		ft_realloc(cx, ft_atoi(s + i));
+		ft_lstadd_back(&cx->stack, ft_create_node(ft_atoi(s + i),
+			ft_lstsize(cx->stack)));
 		return (true);
 	}
 	else

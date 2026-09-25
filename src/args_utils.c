@@ -1,6 +1,6 @@
 #include "../include/push_swap.h"
 
-void	ft_check_args(int argc, char **argv)
+t_context	*ft_check_args(int argc, char **argv)
 {
 	int			i;
 	t_context	*cx;
@@ -15,12 +15,9 @@ void	ft_check_args(int argc, char **argv)
 			ft_check_flag_bench(argv[i], cx) || ft_str_check_num(argv[i], cx))
 			i++;
 		else
-		{
-			printf("Args\n");
 			ft_error_manager(cx);
-		}
-		printf("\n\n\n");
 	}
+	return (cx);
 }
 
 int		ft_check_flag_strategy(char *s, t_context *cx)
@@ -60,7 +57,6 @@ int		ft_str_check_num(char *s, t_context *cx)
 	int		i;
 
 	i = 0;
-	printf("Nms[%c]\n", s[i]);
 	while (s[i])
 		if (ft_str_is_num(s, &i, cx))
 			if (!s[i])
