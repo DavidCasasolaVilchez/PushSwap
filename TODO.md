@@ -29,6 +29,8 @@ Existen dos stacks:
 
 Las operaciones sobre stacks con menos de dos elementos no producen ningún efecto.
 
+![alt text](image.png)
+
 ## Índice de desorden
 
 El índice de desorden se calcula sobre el stack `a` original, antes de realizar movimientos:

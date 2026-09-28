@@ -9,7 +9,7 @@ void	*ft_malloc(int size)
 		exit(ERROR_EXIT);
 	return (ptr);
 }
-void	ft_free_stack(t_list *st)
+void	ft_free_node(t_list *st)
 {
 	if (st != NULL)
 	{
@@ -19,18 +19,35 @@ void	ft_free_stack(t_list *st)
 	}
 }
 
-void	ft_free_context(t_context *cx)
+void	ft_free_stacks(t_context *cx)
 {
+	t_list	*i;
 	t_list	*n;
 
+	i = cx->stack_a;
+	while (i->next != NULL)
+	{
+		n = i->next;
+		ft_free_node(i);
+		i = n;
+	}
+	ft_free_node(i);
+	i = cx->stack_b;
+	while (i->next != NULL)
+	{
+		n = i->next;
+		ft_free_node(i);
+		i = n;
+	}
+	ft_free_node(i);
+	
+}
+
+void	ft_free_context(t_context *cx)
+{
 	if (cx != NULL)
 	{
-		while (cx->stack != NULL)
-		{
-			n = cx->stack->next;
-			ft_free_stack(cx->stack);
-			cx->stack = n;
-		}
+		ft_free_stacks(cx);
 		free(cx);
 	}
 }
