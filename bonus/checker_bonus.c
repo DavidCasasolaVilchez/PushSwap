@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                            :+:      :+:    :+:   */
+/*   checker_bonus.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: mancorte <mancorte@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,55 +10,47 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "push_swap.h"
+#include "checker_bonus.h"
 
-static void	run_strategy(t_ps *p, t_opts *o, t_dis *d)
+static int	run_checker(int *vals, int n)
 {
-	if (o->strat == ST_SIMPLE)
-		sort_simple(p);
-	else if (o->strat == ST_MEDIUM)
-		sort_medium(p);
-	else if (o->strat == ST_COMPLEX)
-		sort_complex(p);
+	t_ck			c;
+	unsigned char	*codes;
+	int				count;
+	int				i;
+
+	if (!ck_read_ops(&codes, &count))
+		return (0);
+	c.a = vals;
+	c.na = n;
+	c.nb = 0;
+	c.b = malloc(sizeof(int) * (n + 1));
+	if (!c.b)
+		return (free(codes), 0);
+	i = 0;
+	while (i < count)
+		ck_exec(&c, codes[i++]);
+	if (ck_sorted(&c))
+		ft_putendl_fd("OK", 1);
 	else
-		sort_adaptive(p, d);
-}
-
-static int	solve(int *vals, int n, t_opts *o)
-{
-	t_ps	p;
-	t_dis	d;
-	int		*rank;
-
-	d = disorder(vals, n);
-	rank = to_ranks(vals, n);
-	if (!rank || !ps_init(&p, rank, n))
-		return (free(rank), 0);
-	free(rank);
-	run_strategy(&p, o, &d);
-	optimize(&p);
-	print_ops(&p);
-	if (o->bench)
-		print_bench(&p, &d);
-	ps_free(&p);
+		ft_putendl_fd("KO", 1);
+	free(c.b);
+	free(codes);
 	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_opts	o;
-	int		*vals;
-	int		n;
-	int		ok;
+	int	*vals;
+	int	n;
+	int	ok;
 
-	o.strat = ST_ADAPTIVE;
-	o.bench = 0;
-	n = parse_args(argc, argv, &o, &vals);
+	if (argc < 2)
+		return (0);
+	n = ck_parse(argc, argv, &vals);
 	if (n < 0)
 		return (ft_putendl_fd("Error", 2), 1);
-	ok = 1;
-	if (n > 0)
-		ok = solve(vals, n, &o);
+	ok = run_checker(vals, n);
 	free(vals);
 	if (!ok)
 		return (ft_putendl_fd("Error", 2), 1);

@@ -1,51 +1,58 @@
-NAME := push_swap
+NAME		= push_swap
+BONUS_NAME	= checker
 
-CC := cc
-CFLAGS := -Wall -Wextra -Werror
-CPPFLAGS := -Iinclude
-RM := rm -f
+CC			= cc
+CFLAGS		= -Wall -Wextra -Werror
+RM			= rm -f
 
-LIBFT := include/libft.a
-SRC_DIR := src
-OBJ_DIR := obj
+LIBFT_DIR	= libft
+LIBFT		= $(LIBFT_DIR)/libft.a
+INCLUDES	= -I. -I$(LIBFT_DIR)
 
-SRC := $(wildcard $(SRC_DIR)/*.c)
-OBJ := $(SRC:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
+SRC_DIR		= src
+OBJ_DIR		= obj
+BONUS_DIR	= bonus
 
-.PHONY: all clean fclean re run test test-valid test-errors
+SRC			= main.c parse.c parse_utils.c stack.c stack_ops.c ops.c \
+			  optimize.c output.c bench.c disorder.c algo_utils.c \
+			  algo_simple.c algo_medium.c algo_complex.c chunk_utils.c algo_low.c lis.c \
+			  algo_small.c algo_adaptive.c
+OBJ			= $(addprefix $(OBJ_DIR)/, $(SRC:.c=.o))
+
+BONUS_SRC	= checker_bonus.c checker_parse_bonus.c checker_ops_bonus.c \
+			  checker_read_bonus.c
+BONUS_OBJ	= $(addprefix $(OBJ_DIR)/, $(BONUS_SRC:.c=.o))
 
 all: $(NAME)
 
-$(NAME): $(OBJ) $(LIBFT)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -g -o $@
+$(NAME): $(LIBFT) $(OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -o $(NAME)
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
-	@mkdir -p $(OBJ_DIR)
-	$(CC) $(CFLAGS) $(CPPFLAGS) -c $< -o $@
+bonus: $(BONUS_NAME)
 
-run: $(NAME)
-	valgrind --leak-check=full ./$(NAME) -12 12 1 123 -123 12 78 "--bench"
+$(BONUS_NAME): $(LIBFT) $(BONUS_OBJ)
+	$(CC) $(CFLAGS) $(BONUS_OBJ) $(LIBFT) -o $(BONUS_NAME)
 
-test: test-valid test-errors
+$(LIBFT):
+	$(MAKE) -C $(LIBFT_DIR)
 
-test-valid: $(NAME)
-	@printf '\n== Sin argumentos ==\n'
-	@./$(NAME)
-	@printf '\n== Numeros separados ==\n'
-	@./$(NAME) 1 2 3 4 5
-	@printf '\n== Numeros negativos y positivos ==\n'
-	@./$(NAME) -12 0 12 -123 78
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c push_swap.h | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
-test-errors: $(NAME)
-	@printf '\n== Argumento no numerico (se espera Error) ==\n'
-	@./$(NAME) 1 hello 3 || true
-	@printf '\n== Flag desconocido (se espera Error) ==\n'
-	@./$(NAME) --unknown || true
+$(OBJ_DIR)/%.o: $(BONUS_DIR)/%.c $(BONUS_DIR)/checker_bonus.h | $(OBJ_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) -I$(BONUS_DIR) -c $< -o $@
+
+$(OBJ_DIR):
+	mkdir -p $(OBJ_DIR)
 
 clean:
-	$(RM) $(OBJ)
+	$(MAKE) -C $(LIBFT_DIR) clean
+	$(RM) -r $(OBJ_DIR)
 
 fclean: clean
-	$(RM) $(NAME)
+	$(MAKE) -C $(LIBFT_DIR) fclean
+	$(RM) $(NAME) $(BONUS_NAME)
 
 re: fclean all
+
+.PHONY: all bonus clean fclean re
