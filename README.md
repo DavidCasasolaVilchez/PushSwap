@@ -1,4 +1,4 @@
-*Este proyecto ha sido creado como parte del currículo de 42 por mancorte, dcasasol.*
+*Este proyecto ha sido creado como parte del currículo de 42 por jucortes, dcasasol.*
 
 # push_swap
 
@@ -360,7 +360,7 @@ complex; ambos quedan en "excelente" (< 700 / < 5500).
 
 ## Contribuciones
 
-- **mancorte**: parser y validación, stacks/operaciones, optimizador de
+- **jucortes**: parser y validación, stacks/operaciones, optimizador de
   rotaciones, estrategias simple/medium/complex/adaptive, checker (bonus),
   Makefile.
 - **dcasasol**: <!-- completar -->
